@@ -56,8 +56,8 @@ import com.cyanogen.lookup.phonenumber.response.StatusCode;
 
 import java.util.List;
 
-import com.suda.cloud.phone.PhoneUtil;
-import com.suda.cloud.phone.PhoneUtil.CallBack;
+import com.sudamod.sdk.phonelocation.PhoneUtil;
+import com.sudamod.sdk.phonelocation.PhoneUtil.CallBack;
 import android.suda.utils.SudaUtils;
 
 /**
@@ -187,8 +187,6 @@ public class CallCardFragment extends BaseFragment<CallCardPresenter, CallCardPr
      */
     private boolean mHasSecondaryCallInfo = false;
 
-    private static PhoneUtil mPu;
-
     private CallRecorder.RecordingProgressListener mRecordingProgressListener =
             new CallRecorder.RecordingProgressListener() {
         @Override
@@ -218,6 +216,8 @@ public class CallCardFragment extends BaseFragment<CallCardPresenter, CallCardPr
             mRecordingIcon.setVisibility(View.VISIBLE);
         }
     };
+
+    private static PhoneUtil mPu;
 
     @Override
     public CallCardPresenter.CallCardUi getUi() {
@@ -613,8 +613,15 @@ public class CallCardFragment extends BaseFragment<CallCardPresenter, CallCardPr
         if (SudaUtils.isSupportLanguage(true) && !TextUtils.isEmpty(name)
                    && nameIsNumber) {
             mPu.getOnlineNumberInfo(name, new CallBack() {
-                    public void execute(String response) {
-                         setPrimaryLabel(response);
+                    public void execute(final String response) {
+                        if(getActivity() == null)
+                            return;	
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                setPrimaryLabel(response);
+                            }
+                         });
                      }
                 }
             );
