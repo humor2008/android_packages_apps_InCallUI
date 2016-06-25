@@ -41,6 +41,7 @@ import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
+import android.view.View;
 import android.widget.RemoteViews;
 import com.android.contacts.common.util.BitmapUtil;
 import com.android.incallui.ContactInfoCache.ContactCacheEntry;
@@ -318,7 +319,7 @@ public class StatusBarNotifier implements InCallPresenter.InCallStateListener,
                 notification.headsUpContentView};
         // add LookupProvider badge to Notification
         Drawable logo = contactInfo.lookupProviderBadge;
-        if (largeIcon != null && logo != null) {
+        if (logo != null) {
             Bitmap bitmap = null;
             if (logo instanceof BitmapDrawable) {
                 bitmap = ((BitmapDrawable) logo).getBitmap();
@@ -332,6 +333,7 @@ public class StatusBarNotifier implements InCallPresenter.InCallStateListener,
             int spamColor = mContext.getResources().getColor(R.color.spam_contact_color);
             for (RemoteViews view : viewsToUpdate) {
                 int rightIconId = getNotificationRightIconId(mContext);
+                view.setViewVisibility(rightIconId, View.VISIBLE);
                 view.setImageViewBitmap(rightIconId, bitmap);
                 view.setViewPadding(rightIconId, 0, 0, 0, 0);
                 if (contactInfo.isSpam) {
