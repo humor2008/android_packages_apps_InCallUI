@@ -467,13 +467,15 @@ public class StatusBarNotifier implements InCallPresenter.InCallStateListener,
                 String contactNumberDisplayed = TextUtils.isEmpty(contactInfo.number) ?
                     "" : contactInfo.number.toString();
                 if (mContext.getResources().
-                    getBoolean(R.bool.display_home_location_on_statusbar)) {
+                    getBoolean(R.bool.display_home_location_on_statusbar)) &&
+                    !TextUtils.isEmpty(contactInfo.location)) {
                         contactNumberDisplayed =  contactNumberDisplayed + " " + contactInfo.location;
                 }
                 return TextUtils.isEmpty(contactNumberDisplayed) ? null
                         : BidiFormatter.getInstance().unicodeWrap(
                                 contactNumberDisplayed, TextDirectionHeuristics.LTR);
             }
+
             return contactInfo.name;
         }
     }
